@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace Virtua_Cop_2_trainer
 {
@@ -26,7 +27,7 @@ namespace Virtua_Cop_2_trainer
             PROCESS_CREATE_PROCESS = (0x0080),
             PROCESS_SET_QUOTA = (0x0100),
             PROCESS_SET_INFORMATION = (0x0200),
-            PROCESS_QUERY_INFORMATION = (0x0400)
+            PROCESS_QUERY_INFORMATION = (0x0400),
         }
 
         [DllImport("kernel32.dll")]
@@ -47,9 +48,11 @@ namespace Virtua_Cop_2_trainer
 		private Process mReadProcess = null;
 		private IntPtr hReadProcess = IntPtr.Zero;
 
-        MAPI.ProcessAccessType access = MAPI.ProcessAccessType.PROCESS_VM_READ
-      | MAPI.ProcessAccessType.PROCESS_VM_WRITE
-      | MAPI.ProcessAccessType.PROCESS_VM_OPERATION;
+		MAPI.ProcessAccessType access = MAPI.ProcessAccessType.PROCESS_VM_READ
+	  | MAPI.ProcessAccessType.PROCESS_VM_WRITE
+	  | MAPI.ProcessAccessType.PROCESS_VM_OPERATION
+			| MAPI.ProcessAccessType.PROCESS_SET_INFORMATION
+			| MAPI.ProcessAccessType.PROCESS_QUERY_INFORMATION;
 
         //Open Process
         public bool OpenProcess()
@@ -64,16 +67,7 @@ namespace Virtua_Cop_2_trainer
 				return false;
 		}
 		
-		public bool ProcessAvaibility(string sProcessName)
-		{
-            Process[] aProcesses = Process.GetProcessesByName(sProcessName);
-			if (aProcesses.Length > 0)
-			{
-				return true;
-			}
-			return false;
-        }
-		public bool OpenProcessOldWay(string sProcessName)
+		public bool GetProcessOldWay(string sProcessName)
 		{
 			Process[] aProcesses = Process.GetProcessesByName(sProcessName);
 			if (aProcesses.Length > 0)
@@ -88,7 +82,6 @@ namespace Virtua_Cop_2_trainer
 		public void OpenOldWay()
 		{
             hReadProcess = MAPI.OpenProcess((uint)access, 1, (uint)mReadProcess.Id);
-			Console.WriteLine("hReadProcess after opening : {0}", hReadProcess.ToString());
         }
 
 		public bool OpenProcess(string sProcessName)
@@ -132,7 +125,7 @@ namespace Virtua_Cop_2_trainer
 		public ProcessModuleCollection GetModules()
 		{
 			return mReadProcess.Modules;
-		}
+        }
 
 		//Get Process Info
 		public string Name()
@@ -474,10 +467,7 @@ namespace Virtua_Cop_2_trainer
 		{
 			int iFinalAddress = CalculatePointer(iMemoryAddress, iOffsets);
 			IntPtr ptrBytesWritten;
-			Console.WriteLine("Process to be written on is {0}", hReadProcess);
 			MAPI.WriteProcessMemory(hReadProcess, (IntPtr)iFinalAddress, bBytesToWrite, (uint)bBytesToWrite.Length, out ptrBytesWritten);
-			Console.WriteLine("bytes written are {0}", ptrBytesWritten.ToInt32());
-            Console.WriteLine("bytes to write are {0}", bBytesToWrite.Length);
             return (ptrBytesWritten.ToInt32() == bBytesToWrite.Length);
 		}
 		public bool NOP(int iMemoryAddress, int[] iOffsets, int iLength)

@@ -22,16 +22,21 @@ namespace Virtua_Cop_2_trainer
         Memory oMemory = new Memory();
         bool IsGameAvailable = false;
 
-        bool unlimitedAmmo = false;
+        bool UnlimitedAmmo = false;
         string ammoPtr = "004CF1AC";
-        int[] ammoOffset = {0x28};
+        int[] ammoOffset = { 0x28 };
         int AmmoToFill = 6;
+
+        bool UnlimitedHealth = false;
+        string healthPtr = "004CF220";
+        int[] healthOffset = { 0x02 };
+        int healthToSet = 9;
 
 
 
         #endregion 
         public Form1()
-        {
+        {  
             InitializeComponent();
         }
 
@@ -50,11 +55,6 @@ namespace Virtua_Cop_2_trainer
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void label3_Click(object sender, EventArgs e)
         {
 
@@ -65,20 +65,38 @@ namespace Virtua_Cop_2_trainer
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e) // AMMO
         {
             if (IsGameAvailable)
             {
-                if (unlimitedAmmo)
+                if (UnlimitedAmmo)
                 {
-                    unlimitedAmmo= false;
-                    UnlimAmmoBTN.Text = "1.OFF";
+                    UnlimitedAmmo= false;
+                    UnlimAmmoBTN.Text = "OFF";
                 } else
                 {
-                    unlimitedAmmo= true;
-                    UnlimAmmoBTN.Text = "1.ON";
+                    UnlimitedAmmo= true;
+                    UnlimAmmoBTN.Text = "ON";
                 }
             }
+        }
+
+        private void Button2_Click(object sender, EventArgs e) // HEALTH
+        {
+            if (IsGameAvailable)
+            {
+                if (UnlimitedHealth)
+                {
+                    UnlimitedHealth= false;
+                    UnlimLifeBTN.Text = "OFF";
+                }
+                else
+                {
+                    UnlimitedHealth= true;
+                    UnlimLifeBTN.Text = "ON";
+                }
+            }
+
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -91,7 +109,6 @@ namespace Virtua_Cop_2_trainer
             // TODO Implement the new way of handling process opening
             if (oMemory.GetProcessOldWay("PPJ2DD"))
             {
-                //Console.WriteLine("\tBASE ADDRESS: 0x" + oMemory.Hex(oMemory.BaseAddress()) + "\n"); ACCESS DENIED
                 IsGameAvailable = true;
                 statusLabel.Text = "Status : Process found";
                 statusLabel.ForeColor = Color.LimeGreen;
@@ -113,7 +130,7 @@ namespace Virtua_Cop_2_trainer
             if (IsGameAvailable)
             {
                 #region Unlimited Ammo
-                if (unlimitedAmmo)
+                if (UnlimitedAmmo)
                 {
                     oMemory.OpenOldWay();
                     int ptrAddr = oMemory.Dec(ammoPtr);
@@ -126,6 +143,24 @@ namespace Virtua_Cop_2_trainer
                     } else
                     {
                         Console.WriteLine("Error writing {0} to address {1}", BitConverter.ToString(valueToWrite), ptrAddr);
+                    }
+                }
+                #endregion
+
+                #region Unlimited Health
+                if (UnlimitedHealth)
+                {
+                    oMemory.OpenOldWay();
+                    int ptrAddr = oMemory.Dec(healthPtr);
+                    int[] ptrOffset = healthOffset;
+                    byte[] valueToWrite = BitConverter.GetBytes(healthToSet);
+                    if (oMemory.Write(ptrAddr, ptrOffset, valueToWrite))
+                    {
+                        Console.WriteLine("Successfully writing {0} to address {1}", BitConverter.ToString(valueToWrite), ptrAddr);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fails writing {0} to address {1}", BitConverter.ToString(valueToWrite), ptrAddr);
                     }
                 }
                 #endregion

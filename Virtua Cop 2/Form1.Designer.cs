@@ -67,9 +67,9 @@
             this.UnlimAmmoBTN.Name = "UnlimAmmoBTN";
             this.UnlimAmmoBTN.Size = new System.Drawing.Size(124, 79);
             this.UnlimAmmoBTN.TabIndex = 1;
-            this.UnlimAmmoBTN.Text = "1.OFF";
+            this.UnlimAmmoBTN.Text = "OFF";
             this.UnlimAmmoBTN.UseVisualStyleBackColor = false;
-            this.UnlimAmmoBTN.Click += new System.EventHandler(this.button1_Click);
+            this.UnlimAmmoBTN.Click += new System.EventHandler(this.Button1_Click);
             // 
             // UnlimLifeBTN
             // 
@@ -80,9 +80,9 @@
             this.UnlimLifeBTN.Name = "UnlimLifeBTN";
             this.UnlimLifeBTN.Size = new System.Drawing.Size(128, 79);
             this.UnlimLifeBTN.TabIndex = 2;
-            this.UnlimLifeBTN.Text = "2.OFF";
+            this.UnlimLifeBTN.Text = "OFF";
             this.UnlimLifeBTN.UseVisualStyleBackColor = false;
-            this.UnlimLifeBTN.Click += new System.EventHandler(this.button2_Click);
+            this.UnlimLifeBTN.Click += new System.EventHandler(this.Button2_Click);
             // 
             // label2
             // 
@@ -92,9 +92,9 @@
             this.label2.ForeColor = System.Drawing.Color.Cyan;
             this.label2.Location = new System.Drawing.Point(175, 51);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(107, 32);
+            this.label2.Size = new System.Drawing.Size(135, 32);
             this.label2.TabIndex = 3;
-            this.label2.Text = "INFINITE LIFE";
+            this.label2.Text = "INFINITE HEALTH";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // UnlimCreditsBTN
@@ -106,7 +106,7 @@
             this.UnlimCreditsBTN.Name = "UnlimCreditsBTN";
             this.UnlimCreditsBTN.Size = new System.Drawing.Size(124, 85);
             this.UnlimCreditsBTN.TabIndex = 4;
-            this.UnlimCreditsBTN.Text = "3.OFF";
+            this.UnlimCreditsBTN.Text = "OFF";
             this.UnlimCreditsBTN.UseVisualStyleBackColor = false;
             // 
             // label3

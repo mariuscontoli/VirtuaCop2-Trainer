@@ -27,7 +27,7 @@ namespace Virtua_Cop_2_trainer
             PROCESS_CREATE_PROCESS = (0x0080),
             PROCESS_SET_QUOTA = (0x0100),
             PROCESS_SET_INFORMATION = (0x0200),
-            PROCESS_QUERY_INFORMATION = (0x0400),
+            PROCESS_QUERY_INFORMATION = (0x0400)
         }
 
         [DllImport("kernel32.dll")]

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Virtua_Cop_2_trainer
+﻿namespace Virtua_Cop_2_trainer
 {
 
     using System;
-    using System.Diagnostics;
-    using System.Windows.Forms;
     using System.Runtime.InteropServices;
+    using System.Windows.Forms;
 
     public class InterceptKeys
     {

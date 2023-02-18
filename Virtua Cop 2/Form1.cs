@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Globalization;
-using System.Threading;
 
 namespace Virtua_Cop_2_trainer
 {
@@ -32,11 +21,14 @@ namespace Virtua_Cop_2_trainer
         int[] healthOffset = { 0x02 };
         int healthToSet = 9;
 
+        string scorePtr = "10DD2D3C";
+        int[] scoreOffset = { 0x10 };
+        int oldScore;
 
 
         #endregion 
         public Form1()
-        {  
+        {
             InitializeComponent();
         }
 
@@ -60,22 +52,18 @@ namespace Virtua_Cop_2_trainer
 
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Button1_Click(object sender, EventArgs e) // AMMO
         {
             if (IsGameAvailable)
             {
                 if (UnlimitedAmmo)
                 {
-                    UnlimitedAmmo= false;
+                    UnlimitedAmmo = false;
                     UnlimAmmoBTN.Text = "OFF";
-                } else
+                }
+                else
                 {
-                    UnlimitedAmmo= true;
+                    UnlimitedAmmo = true;
                     UnlimAmmoBTN.Text = "ON";
                 }
             }
@@ -87,12 +75,12 @@ namespace Virtua_Cop_2_trainer
             {
                 if (UnlimitedHealth)
                 {
-                    UnlimitedHealth= false;
+                    UnlimitedHealth = false;
                     UnlimLifeBTN.Text = "OFF";
                 }
                 else
                 {
-                    UnlimitedHealth= true;
+                    UnlimitedHealth = true;
                     UnlimLifeBTN.Text = "ON";
                 }
             }
@@ -112,7 +100,8 @@ namespace Virtua_Cop_2_trainer
                 IsGameAvailable = true;
                 statusLabel.Text = "Status : Process found";
                 statusLabel.ForeColor = Color.LimeGreen;
-            } else
+            }
+            else
             {
                 IsGameAvailable = false;
                 statusLabel.Text = "Status : Process not found";
@@ -140,7 +129,8 @@ namespace Virtua_Cop_2_trainer
                     {
                         Console.WriteLine("Successfully writing {0} to address {1}", BitConverter.ToString(valueToWrite), ptrAddr);
 
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine("Error writing {0} to address {1}", BitConverter.ToString(valueToWrite), ptrAddr);
                     }
@@ -164,6 +154,65 @@ namespace Virtua_Cop_2_trainer
                     }
                 }
                 #endregion
+
+                #region Score Multiplier
+
+                //oMemory.OpenOldWay();
+                int scorePtrAddr = oMemory.Dec(scorePtr);
+                int[] scorePtrOffset = scoreOffset;
+                uint scoreToChange = oMemory.ReadInt(scorePtrAddr, scorePtrOffset);
+                Console.WriteLine(scoreToChange);
+                int score;
+                try
+                {
+                    score = Convert.ToInt32(scoreToChange);
+                }
+                catch
+                {
+                    score = oldScore;
+                    Console.WriteLine("Max score reached");
+                }
+
+                int scoreDiff, scoreMultiplied;
+                if (scoreToChange != oldScore)
+                {
+                    scoreDiff = score - oldScore;
+                    scoreMultiplied = scoreDiff * Convert.ToInt32(multiValue.Text);
+                    score -= scoreDiff;
+                    score += scoreMultiplied;
+                    oldScore = score;
+
+                    byte[] valueToWrite = BitConverter.GetBytes(score);
+                    if (oMemory.Write(scorePtrAddr, scorePtrOffset, valueToWrite))
+                    {
+                        Console.WriteLine("Successfully writing {0} to address {1}", BitConverter.ToString(valueToWrite), scorePtrAddr);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fails wrinting {0} to address {1}", BitConverter.ToString(valueToWrite), scorePtrAddr);
+                    }
+                }
+                #endregion
+            }
+        }
+
+        private void multiIncr_Click(object sender, EventArgs e)
+        {
+            int scoreMultiplier = (Convert.ToInt32((multiValue.Text)));
+
+            if (scoreMultiplier < 999)
+            {
+                multiValue.Text = (scoreMultiplier + 1).ToString();
+            }
+        }
+
+        private void multiMinus_Click(object sender, EventArgs e)
+        {
+            int scoreMultiplier = (Convert.ToInt32((multiValue.Text)));
+
+            if (scoreMultiplier > 1)
+            {
+                multiValue.Text = (scoreMultiplier - 1).ToString();
             }
         }
     }

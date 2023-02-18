@@ -143,6 +143,7 @@
             this.multiIncr.TabIndex = 7;
             this.multiIncr.Text = "+";
             this.multiIncr.UseVisualStyleBackColor = true;
+            this.multiIncr.Click += new System.EventHandler(this.multiIncr_Click);
             // 
             // multiMinus
             // 
@@ -153,7 +154,7 @@
             this.multiMinus.TabIndex = 8;
             this.multiMinus.Text = "-";
             this.multiMinus.UseVisualStyleBackColor = true;
-            this.multiMinus.Click += new System.EventHandler(this.button5_Click);
+            this.multiMinus.Click += new System.EventHandler(this.multiMinus_Click);
             // 
             // multiValue
             // 

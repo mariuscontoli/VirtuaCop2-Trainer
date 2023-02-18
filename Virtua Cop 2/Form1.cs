@@ -161,7 +161,6 @@ namespace Virtua_Cop_2_trainer
                 int scorePtrAddr = oMemory.Dec(scorePtr);
                 int[] scorePtrOffset = scoreOffset;
                 uint scoreToChange = oMemory.ReadInt(scorePtrAddr, scorePtrOffset);
-                Console.WriteLine(scoreToChange);
                 int score;
                 try
                 {
@@ -179,7 +178,7 @@ namespace Virtua_Cop_2_trainer
                     scoreDiff = score - oldScore;
                     scoreMultiplied = scoreDiff * Convert.ToInt32(multiValue.Text);
                     score -= scoreDiff;
-                    score += scoreMultiplied;
+                    score = scoreMultiplied;
                     oldScore = score;
 
                     byte[] valueToWrite = BitConverter.GetBytes(score);
